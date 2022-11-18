@@ -1,0 +1,303 @@
+﻿@model OberMindTestDemo.Models.ViewModel.PurhcaseOrderViewModel
+
+@{
+    ViewData["Title"] = "Purchase OrderList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+    #columns li > .accordion-btn::before {
+        content: "\f068";
+        position: absolute;
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        right: 16px;
+        top: 10px;
+        color: #000;
+    }
+
+    #columns li:not(.show) > .accordion-btn::before {
+        content: "\2b";
+    }
+
+    #columns li > .accordion-btn {
+        position: relative;
+        padding: 10px;
+        background-color: #e9e9e9;
+        border: 1px solid #e9e9e9;
+        display: block;
+    }
+
+    li.column.level1 {
+        background-color: #f9f9f9;
+    }
+
+    li.level2 {
+        background-color: #f1f1f1;
+    }
+
+    #columns li:not(.show) > .accordion-btn {
+        background-color: transparent;
+        border: 1px solid #ddd;
+    }
+
+    .sub-accordion-list {
+        list-style-type: none;
+        padding: 10px 25px 0;
+    }
+
+    ul#columns {
+        list-style-type: none;
+    }
+
+    .icon {
+        background: transparent url( /plus-minus.png ) no-repeat left top;
+        display: block;
+        height: 12px;
+        width: 12px;
+        float: left;
+        cursor: pointer;
+    }
+
+    .checkbox-row {
+        column-count: 3;
+        padding-bottom: 10px;
+    }
+
+        .checkbox-row label {
+            margin: 0;
+        }
+
+        .checkbox-row > div {
+            margin-bottom: 0px;
+        }
+
+    .plus {
+        background-position: left top;
+        margin-top: 3px;
+    }
+
+    .minus {
+        background-position: left -10px;
+        margin-top: 3px;
+    }
+
+    .hiddenRow {
+        padding: 0 !important;
+    }
+
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Order List  | </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/Home/Index">Home <span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">OrderList <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br />
+<section class="container">
+    <p>
+        <a class="btn btn-primary popup btn-sm" href="/PurchaseOrder/SaveOrderDetail">Add Order  </a>
+
+    </p>
+
+    <br />
+    <div class="my-custom-scrollbar" style="max-height: 400px; overflow-y: auto;">
+        <div class="">
+
+            <div class="table-wrapper-scroll-y my-item-scrollbar">
+
+                <table class="table table table-condensed table-bordered table-striped mb-0" style="border-collapse:collapse;" id="maintable">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Order Name</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (@Model.ItemList.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.PurcahseOrderList.Count; i++)
+                            {
+
+                                <tr class="data-contact-person">
+                                    <td>
+                                        <button class="btn btn-primary" onclick="changeIcon(@Model.PurcahseOrderList[i].ID)" type="button">
+                                            <i class="fa-solid fa-circle-plus " id="icon_@Model.PurcahseOrderList[i].ID"></i>
+                                        </button>
+
+                                        @{
+                                            var count = i + 1;
+                                        }
+                                        (@count)
+                                    </td>
+                                    <td>
+                                        <input type="hidden" value="@Model.PurcahseOrderList[i].ID" class="form-control s-Id" />
+                                        @Html.DisplayFor(modelOrder => Model.PurcahseOrderList[i].OrderNumber)
+                                    </td>
+                                    <td>
+                                        @if (Model.PurcahseOrderList[i].Amount > 0)
+                                        {
+                                            @Html.DisplayFor(modelOrder => Model.PurcahseOrderList[i].Amount)
+
+                                        }
+                                        else
+                                        {
+                                            <p>0</p>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(modelOrder =>Model.PurcahseOrderList[i].Status, Model.StatusList, "---Select Type---", new
+                                {
+                                Class = "",
+                                id = "Status",@disabled = "disabled",style="color:black"
+                                })
+                                    </td>
+                                    <td class="btn-td">
+
+                                        <a class="class pl-2" href="/PurchaseOrder/SaveOrderDetail?id=@Convert.ToInt32(@Model.PurcahseOrderList[i].ID)">
+                                            <i class="fas fa-edit "></i>
+                                        </a>
+                                        <a class="class pl-2" onclick="DeleteRecord(@Model.PurcahseOrderList[i].ID)" href="#">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+
+                                </tr>
+                                <tr>
+
+                                    <td colspan="6" class="hiddenRow">
+                                        @if (Model.OrderMasterList.Count > 0 && Model.OrderMasterList.Where(x => x.OrderID == Model.PurcahseOrderList[i].ID).ToList().Count > 0)
+                                        {
+                                            <div id="demo_@Model.PurcahseOrderList[i].ID" class=" row  col-lg-8" style="display:none">
+
+                                                <div class="card card-body">
+                                                    <table class="table table table-condensed table-bordered table-striped mb-0" style="border-collapse:collapse;" id="maintable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="col-sm-1"> No.</th>
+                                                                <th>Item Name</th>
+                                                                <th>Item Price</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @foreach (var item in Model.OrderMasterList.Where(x => x.OrderID == Model.PurcahseOrderList[i].ID).ToList())
+                                                            {
+
+                                                                <tr>
+                                                                    <td> <i class="fa-solid fa-circle-dot"></i> </td>
+                                                                    <td class="col-lg-3">
+                                                                        <span> @item.ItemName </span>
+                                                                    </td>
+                                                                    <td class="col-lg-3">
+                                                                        <span> @item.ItemPrice </span>
+                                                                    </td>
+                                                                </tr>
+
+                                                            }
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+
+                                            </div>
+                                        }
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>No data Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <br />
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+</section>
+
+<script>
+
+
+    function changeIcon(id) {
+
+        var x = document.getElementById('demo_' + id + '');
+        //if ($('#demo_' + id + '').is(':visible')) {
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            $('#icon_' + id + '').removeClass();
+            $('#icon_' + id + '').addClass("fa-solid fa-circle-minus");
+        }
+        else {
+            x.style.display = "none";
+            $('#icon_' + id + '').removeClass();
+            $('#icon_' + id + '').addClass("fa-solid fa-circle-plus");
+        };
+        ;
+    };
+    function DeleteRecord(id) {
+        var result = confirm("Are you sure you wish to delete this Order?");
+        if (result) {
+            $.ajax({
+                type: "POST",
+                url: "DeleteOrderData",
+                data: { id: id },
+                success: function (response) {
+                    if (response.status > 0) {
+
+                        var url = "/PurchaseOrder/PurchaseOrderList";
+                        window.location.href = url;
+                    }
+                },
+                failure: function (response) {
+                    alert(response.message);
+                },
+                error: function (response) {
+                    alert(response.message);
+                }
+            });
+        };
+    };
+
+
+</script>

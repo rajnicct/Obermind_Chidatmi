@@ -1,0 +1,492 @@
+﻿@model OberMindTestDemo.Models.ViewModel.PurhcaseOrderViewModel
+@{
+    ViewData["Title"] = "SaveOrderDetail";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+
+
+    .table-wrapper {
+        width: 100%;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    }
+
+
+    .table-title {
+        padding-bottom: 10px;
+        margin: 0 0 10px;
+    }
+
+        .table-title h2 {
+            margin: 6px 0 0;
+            font-size: 22px;
+        }
+
+        .table-title .add-new {
+            float: right;
+            height: 30px;
+            font-weight: bold;
+            font-size: 12px;
+            text-shadow: none;
+            min-width: 100px;
+            border-radius: 50px;
+            line-height: 13px;
+        }
+
+            .table-title .add-new i {
+                margin-right: 4px;
+            }
+
+    table.table tr th, table.table tr td {
+        border-color: #e9e9e9;
+    }
+
+    table.table th i {
+        font-size: 13px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    table.table th:last-child {
+        width: 150px;
+    }
+
+    table.table td a {
+        cursor: pointer;
+        display: inline-block;
+        margin: 0 5px;
+        min-width: 24px;
+    }
+
+        table.table td a.add {
+            color: #27C46B;
+        }
+
+        table.table td a.edit {
+            color: #FFC107;
+        }
+
+        table.table td a.delete {
+            color: #E34724;
+        }
+
+    table.table td i {
+        font-size: 13px;
+    }
+
+    table.table td a.add i {
+        font-size: 24px;
+        margin-right: -1px;
+        position: relative;
+        top: 3px;
+    }
+
+    table.table .form-control {
+        height: 32px;
+        line-height: 32px;
+        box-shadow: none;
+        border-radius: 2px;
+    }
+
+        table.table .form-control.error {
+            border-color: #f50000;
+        }
+
+    table.table td .add {
+        display: none;
+    }
+
+    #columns {
+        list-style-type: none;
+        padding: 0;
+    }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+@*
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Order  Detail | </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item ">
+                <a class="nav-link" href="/Home/Index">Home <span class="sr-only">></span></a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="/PurchaseOrder/PurchaseOrderList">OrderList <span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Order Detail <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<br />
+<section class=" container row col-lg-12">
+
+    <div class=" row  col-lg-12">
+        <div class="form-group col-lg-3">
+            @Html.HiddenFor(m => m.PurcahseOrder.ID,new
+            {
+            Class = "form-control",id = "id"
+            } )
+            <span asp-for="OrderNumber" class="control-label">Order Number </span>
+            @if (@Model.PurcahseOrder.ID == 0)
+            {
+                @Html.TextBoxFor(m => m.PurcahseOrder.OrderNumber, new
+            {
+            Class = "form-control",id = "OrderNumber"
+            })
+
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.PurcahseOrder.OrderNumber, new
+            {
+            Class = "form-control",id = "OrderNumber",@readonly = "readonly"
+            })
+            }
+
+        </div>
+
+        <div class="form-group col-lg-3">
+            <span asp-for="Amount" class="control-label">Amount</span>
+            @Html.TextBoxFor(m => m.PurcahseOrder.Amount, new
+            {
+            Class = "form-control",id = "Amount",@readonly = "readonly"
+            })
+        </div>
+        <div class="form-group col-lg-3">
+            <span asp-for="Status" class="control-label pt-3">Status</span>
+            @if (Model.PurcahseOrder.Status < 2)
+            { 
+                @Html.DropDownListFor(m => m.PurcahseOrder.Status, Model.StatusList, "---Select Type---", new
+            {
+            Class = "form-control l-name01 type",
+            id = "Status",onchange="DisabledButton()"
+            })
+            }
+            else
+            {
+
+                @Html.DropDownListFor(m => m.PurcahseOrder.Status, Model.StatusList, "---Select Type---", new
+            {
+            Class = "form-control l-name01 type",
+            id = "Status",@disabled = "disabled"
+            })
+
+            } 
+
+        </div>
+        <div class="form-group col-lg-12">
+             <a class="nav-btn btn-primary btn-sm" href="/PurchaseOrder/PurchaseOrderList">Back To List <span class="sr-only"></span></a>
+            @if (Model.PurcahseOrder.Status < 2)
+            {
+
+                <button type="button" onclick="submitOrder(@Model.PurcahseOrder.ID,@Model.PurcahseOrder.OrderNumber)" class="btn btn-primary btn-sm  " style="margin: 1px 40px;">Save </button>
+            }
+            else
+            {
+                <button type="button"  class="btn btn-primary btn-sm  " style="margin: 1px 40px;" disabled>Save </button>
+            }
+
+            @if (Model.AddFlag)
+            {
+
+
+                    <button type="button" class="btn btn-primary btn-sm" id="add" data-toggle="modal" onclick="GetItemDetail(0)" data-target="#myModal">
+                        Add Item
+                    </button>
+
+
+
+
+                    <br />
+            }
+
+        </div>
+    </div>
+    @if (Model.AddFlag)
+    {
+
+
+            <div class="col-lg-12">
+
+                <div class=" col-lg-8">
+
+                @Html.Partial("_OrderDetailList", Model)
+
+                </div>
+            </div>
+    }
+
+
+
+</section>
+<div>
+
+    <div id="myModal" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content col-lg-12">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="myModalLabel">Add Items </h5>
+
+                    <button type="button" class="close" onClick="window.location.reload(true)" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="itemFormDetails" style="max-height: 500px; overflow-y: auto;">
+                    <div class=" table-wrapper-scroll-y my-item-scrollbar ">
+                        <table id="itemInfo" class="table table table-condensed table-bordered table-striped mb-0" style="border-collapse:collapse;">
+                            <thead>
+                                <tr>
+                                    <th> Name </th>
+                                    <th> Price </th>
+                                    <th> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div id="myOrderModal" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static">
+
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="myOrderModalLabel">Order Detail  </h5>
+                </div>
+                @Html.Partial("_SaveItemDetail", Model.OrderDetail)
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    @*
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css" />
+        <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
+
+
+
+        <script>
+            $(document).ready(function () {
+                DisabledButton();
+            });
+
+            function GetItemDetail(Id) {
+                var status = $('#Status').find(":selected").val();
+                if (status == 1) {
+                    $.ajax({
+                        url: '/PurchaseOrder/GetItemData',
+                        type: 'get',
+                        dataType: 'json',
+                        data: { Id: Id },
+                        success: function (response) {
+                            if (response != '') {
+                                var tr;
+
+                                //Append each row to html table
+                                for (var i = 0; i < response.length; i++) {
+                                    tr = $('<tr/>');
+                                    tr.append('<td><input type="hidden" value="' + response[i].id + '" class="form-control s-Id">' + response[i].itemNumber + '</td>');
+                                    tr.append('<td><input type = "number" id ="itemPriceA_' + response[i].id + '"  name = "' + response[i].itemPrice + ' onchange="getTotal()" class="form-control f-price01 type" min="1" value="' + response[i].itemPrice + '" /></td>');
+                                    tr.append('<td class="btn-td"><button type="button" id ="btnAdd" class="btn btn-primary btn-sm  " onclick = "SaveItemData(' + response[i].id + ',' + response[i].itemPrice + ',' + 0 + ')" style = "margin: 0px 6px;" > Add </button></td>');
+                                    $('#itemInfo').append(tr);
+
+                                };
+                                $('#itemInfo').DataTable();
+                                $("#myModal").modal("show");
+                            }
+                        }
+                    });
+                }
+                else {
+                    alert("No changes  will be  allowed  on Order  Status as SUBMITTED");
+                }
+
+            }
+
+
+            function GetOrderdata(id) {
+                var status = $('#Status').val();
+                if (status == 1) {
+                    var url = "/PurchaseOrder/GetOrderdetails?id=" + id;
+                    $.get(url,
+                        function (data) {
+                            $('#myOrderModal').html(data);
+
+                        });
+
+                    $("#myOrderModal").modal("show");
+                }
+                else {
+                    alert("No changes will be Allowed on Order  Status as SUBMITTED");
+                }
+            };
+
+            function submitOrder(id,orderName) {
+                var status = $('#Status').find(":selected").val();
+               if (status == 0) {
+                    alert("Plz Select The Order Status");
+                }
+                else {
+                if (id < 1) {
+                    orderName = $('#OrderNumber').val();
+                };
+                
+                $.ajax({
+                    type: "POST",
+                    url: "/PurchaseOrder/SaveOrderData/",
+                    data: { id: id, orderName: orderName, statusId: status },
+                    success: function (response) {
+                        if (response.status > 0) 
+                            {
+                                var url ="";
+                              if(status==1)
+                              { url = "/PurchaseOrder/SaveOrderDetail?id=" + response.data + "&status=" + status;
+                              }
+                              else
+                              {
+                                   url = "/PurchaseOrder/PurchaseOrderList";
+                              }      window.location.href = url;
+                           
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.message);
+                    },
+                    error: function (response) {
+                        alert(response.message);
+                    }
+                });
+                }
+            };
+
+            function SaveItemData(id, price, flag) {
+                if (price == 0) {
+                    alert("Plz Fill the ItemPrice ");
+                }
+                else {
+                    if (flag == 0) {
+                        price = $('#itemPriceA_' + id + '').val();
+                    }
+                    else {
+                        price = $('#itemPriceE_' + id + '').val();
+                    }
+                    var status = $('#Status').find(":selected").val();
+                    var orderId = @Model.PurcahseOrder.ID;
+                    $.ajax({
+                        type: "POST",
+                        url: "/PurchaseOrder/SaveItemsDatabyOrderId/",
+                        data: { orderId: orderId, id: id, itemPrice: price, flag: flag },
+                        success: function (response) {
+                            if (response.status > 0) {
+                                $("#myModal").modal("hide");
+                                var url = "/PurchaseOrder/SaveOrderDetail?id=" + response.data + "&status=" + status;
+                                window.location.href = url;
+
+                            }
+                            else {
+                                $("#myModal").modal("show");
+                                alert(response.message);
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.message);
+                        },
+                        error: function (response) {
+                            alert(response.message);
+                        }
+                    });
+                }
+                /*  var subTitleId = $('#subTitleId').val();*/
+
+            };
+            function deleteItem(id) {
+                var status = $('#Status').find(":selected").val();
+                if (id > 0 && status == 1) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/PurchaseOrder/DeleteOrderDetailData/",
+                        data: { id: id },
+                        success: function (response) {
+                            if (response.status > 0) {
+                                var url = "/PurchaseOrder/SaveOrderDetail?id=" + response.data + "&status=" + status;
+                                window.location.href = url;
+
+                            }
+                            else {
+                                alert(response.message);
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.message);
+                        },
+                        error: function (response) {
+                            alert(response.message);
+                        }
+                    });
+                }
+                else {
+                    alert("No changes  will be  allowed  on Order  Status as SUBMITTED");
+                }
+            };
+
+
+
+            function DisabledButton() {
+                 var status = $('#Status').find(":selected").val();
+                if (status == 1) {
+                    $('#add').prop('disabled', false);
+                    $('#maintable').find('tr').find('input,button').prop('disabled', false);
+
+                } else {
+                    $('#add').prop('disabled', true);
+                    $('#maintable').find('tr').find('input,button').prop('disabled', true);
+                }
+
+            };
+
+
+        </script>
+    }

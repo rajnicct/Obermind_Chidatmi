@@ -1,0 +1,37 @@
+﻿@model OberMindTestDemo.Models.ViewModel.OrderDetailViewModel
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+
+            <h5 class="modal-title">Edit Order Detail </h5>
+
+            <button type="button" class="close" onClick="window.location.reload(true)" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="studentFormDetails">
+            <input asp-for="ID" id="ID" class="form-control" hidden />
+            <input asp-for="OrderID" id="OrderID" class="form-control" hidden />
+            <div class="form-group">
+                <label asp-for="ItemName" class="control-label">Item Name</label>
+                @Html.TextBoxFor(modelItem => modelItem.ItemName, new
+                {
+                Class = "form-control f-name01",disabled = "disabled"
+                })
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemPrice" class="control-label">Item Price</label>
+                @Html.TextBoxFor(modelItem => modelItem.ItemPrice, new
+                {
+                Class = "form-control f-price01 type",
+                id = "itemPriceE_"+Model.ItemID+"",type = "number", min = "0"
+                })
+            </div>
+        </div>
+        <div class="modal-footer" style="text-align: center">
+            <button id="btnSave" type="button" onclick="SaveItemData(@Model.ItemID,@Model.ItemPrice,1)" class="btn btn-primary"> Save</button>
+            <button type="button" class="btn btn-secondary" onClick="window.location.reload(true)" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</div>

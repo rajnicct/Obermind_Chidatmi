@@ -1,0 +1,67 @@
+﻿@model OberMindTestDemo.Models.ViewModel.PurhcaseOrderViewModel
+
+<div class="modal-header">
+
+    <h5 class="modal-title" id="myOrderModalLabel">Order Detail List </h5>
+</div>
+
+<div class="table-wrapper-scroll-y my-item-scrollbar">
+
+    <table class="table table-bordered table-striped mb-0" id="maintable">
+        <thead>
+            <tr>
+                <th> ItemNumber </th>
+                <th> Price </th>
+                <th> Action </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (@Model.ItemList.Count > 0)
+            {
+                @foreach (var item in Model.OrderMasterList)
+                {
+
+                    <tr class="data-contact-person">
+                        <td>
+                            <input type="hidden" value="@item.ID" class="form-control s-Id" />
+                            @Html.DisplayFor(m => item.ItemName, new
+                    {
+                    Class = "form-control f-name01"
+                    })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemPrice, new
+                    {
+                    Class = "form-control f-price01 type",
+                    id = "itemPrice",type = "number", min = "1"
+                    })
+                        </td>
+                        <td class="btn-td">
+
+                            <button type="button" id="btnEdit" class="btn btn-primary btn-sm" data-toggle="modal" onclick="GetOrderdata(@item.ID)" data-target="#myOrderModal">     <i class="fas fa-edit "></i>  </button>
+                            <button type="button" id="btnDelete" class="btn btn-danger btn-sm deleteItem " onclick="deleteItem(@item.ID)"> <i class="fas fa-trash"></i> </button>
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>No data Found</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <br />
+
+</div>
+
+
+
+
+
+
+
+
